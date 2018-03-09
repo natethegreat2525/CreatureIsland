@@ -39,7 +39,7 @@ public class IslandSim {
 
 	public static int WIDTH = 1024, HEIGHT = 768;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		Window win = new Window(WIDTH, HEIGHT, "Player Test");
 		win.setCursorMode(GLFW.GLFW_CURSOR_DISABLED);
 
@@ -78,8 +78,15 @@ public class IslandSim {
 		while (!win.shouldClose()) {
 			long newDelta = System.currentTimeMillis();
 			delta = (newDelta - deltaTime) / (1000 / 60.0f);
+			long diff = newDelta - deltaTime;
+
 			deltaTime = newDelta;
 			delta = Math.min(delta, 4);
+			
+			//System.out.println(diff);
+			if (diff < 15) {
+				Thread.sleep(15 - diff);
+			}
 			
 			if (timer >= 5*60) {
 				timer -= 5*60;
@@ -109,7 +116,7 @@ public class IslandSim {
 			N3D.pushMatrix();
 			N3D.multMatrix(c.getTotalMatrix());
 			
-			if (Input.isKeyDown(GLFW.GLFW_KEY_M)) {
+			if (Input.isKeyDown(GLFW.GLFW_KEY_Q)) {
 				glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 			} else {
 				glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
