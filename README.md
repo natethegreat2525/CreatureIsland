@@ -6,9 +6,11 @@ Creatures (bunnies) are simulated on an island with limited resources (grass).
 
 ## Controls:
 
-F - Toggles fast mode (increases simulation speed x60)
+F - toggles fast mode (increases simulation speed x60)
 
 N - hold to move fast/fly
+
+Q - wire frame
 
 M - add bunny at current position
 
