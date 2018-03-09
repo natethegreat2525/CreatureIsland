@@ -4,15 +4,20 @@ Depends on LWJGL, 3dEngine and BlockGame repos
 
 Creatures (bunnies) are simulated on an island with limited resources (grass).
 
-Controls:
+## Controls:
 
 F - Toggles fast mode (increases simulation speed x60)
+
 N - hold to move fast/fly
+
 M - add bunny at current position
+
 WASD - Movement
+
 Space - jump
 
-Simulation rules:
+
+## Simulation rules:
  - Bunnies eat grass to reproduce
  - When a bunny eats grass, it dies and is replaced by 2 new bunnies.
  - A bunny must wait some number of frames to eat grass after it is born. (prevents bunnies from eating all grass immediately)
@@ -21,7 +26,7 @@ Simulation rules:
  - Bunnies avoid water by turning around if they detect water.
  - Every frame, a random x,y coordinate is chosen in a 200x200 square around the origin. If that square contains grass then some number of points around that grass block are chosen. Each point that grass can grow (is above water and is green) will get a new grass block.
 
-Example islands
+## Example islands
 
 ![](https://github.com/natethegreat2525/CreatureIsland/blob/master/screenshots/island4.png)
 
