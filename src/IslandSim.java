@@ -61,7 +61,10 @@ public class IslandSim {
 		ChunkViewport cv = new ChunkViewport(new Vector3i(), new Vector3i(5, 3, 5), world, tx);		
 		Simulator sim = new Simulator(world, cv, new Vector3f(0, -.01f, 0), box);
 		
-		PlayerEntity player = new PlayerEntity(box, new Vector3f(), new Vector3f(.5f, 1.5f, .5f), c);
+		Raycast playerStart = world.raycast(new Vector3f(.5f, 30, .5f), new Vector3f(0, -1, 0), 30);
+		playerStart.position.y += .5;
+
+		PlayerEntity player = new PlayerEntity(box, playerStart.position, new Vector3f(.5f, 1.5f, .5f), c);
 		sim.add(player);
 		
 		sim.add(new GrassGrower());
