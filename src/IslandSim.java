@@ -15,7 +15,7 @@ import chunks.ChunkViewport;
 
 import com.nshirley.engine3d.N3D;
 import com.nshirley.engine3d.entities.Camera3d;
-import com.nshirley.engine3d.entities.Entity;
+import com.nshirley.engine3d.entities.Mesh;
 import com.nshirley.engine3d.entities.shapes.Shape;
 import com.nshirley.engine3d.graphics.Texture;
 import com.nshirley.engine3d.math.Matrix4f;
@@ -31,6 +31,8 @@ import engine.PlayerEntity;
 import engine.Simulator;
 import physics.PhysSim;
 import physics.Rect;
+import voxels.VoxelData;
+import voxels.VoxelDrawBuilder;
 
 public class IslandSim {
 	
@@ -49,13 +51,18 @@ public class IslandSim {
 
 		Texture tx = new Texture("res/blocks_a.png");
 		Texture blank = new Texture("res/blank.png");
-		
+
 		Blocks.init();
 
+		Mesh bunny = VoxelDrawBuilder.generateChunkEntity(
+				VoxelData.fromStream(IslandSim.class.getClassLoader().getResourceAsStream("bunny.vox")),
+				tx
+				);
+		
 		Camera3d c = new Camera3d((float) Math.toRadians(100), WIDTH, HEIGHT,
 				.1f, 1000);
 		
-		Entity box = new Entity(Shape.cube(), blank);
+		Mesh box = new Mesh(Shape.cube(), blank);
 
 		World world = new World(new IslandBuilder(10, 80, 300, 0));
 		ChunkViewport cv = new ChunkViewport(new Vector3i(), new Vector3i(5, 3, 5), world, tx);		
@@ -102,7 +109,7 @@ public class IslandSim {
 			win.pollEvents();
 			
 			if (Input.isKeyHit(GLFW.GLFW_KEY_M)) {
-				sim.add(new MoveEntity(player.headPos.clone()));
+				sim.add(new MoveEntity(player.headPos.clone(), bunny));
 			}
 			
 			if (Input.isKeyHit(GLFW.GLFW_KEY_F))

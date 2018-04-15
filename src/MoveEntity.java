@@ -1,3 +1,5 @@
+import com.nshirley.engine3d.entities.Mesh;
+import com.nshirley.engine3d.math.Matrix4f;
 import com.nshirley.engine3d.math.Vector3f;
 import com.nshirley.engine3d.math.Vector3i;
 
@@ -12,8 +14,10 @@ public class MoveEntity extends SimEntity {
 	public double timer = 0;
 	public int dir = 0;
 	public double life = 4000;
+	public Mesh ent;
 	
-	public MoveEntity(Vector3f pos) {
+	public MoveEntity(Vector3f pos, Mesh ent) {
+		this.ent = ent;
 		IslandSim.bunniesBorn++;
 		rect = new PhysRect(new Vector3f(.5f, .5f, .5f), pos, null);
 	}
@@ -39,12 +43,12 @@ public class MoveEntity extends SimEntity {
 			dir = (int) (Math.random() * 4);
 		}
 		Vector3f v = rect.getVelocity();
-		if (dir < 2) {
+		if (dir % 2 == 0) {
 			v.z = 0;
-			v.x = ((dir * 2) - 1) * .03f;
+			v.x = (dir - 1) * .03f;
 		} else {
 			v.x = 0;
-			v.z = (((dir % 2) * 2) - 1) * .03f;
+			v.z = (dir - 2) * .03f;
 		}
 		
 		Vector3f face = v.clone();
@@ -64,9 +68,9 @@ public class MoveEntity extends SimEntity {
 			if (val.position.sub(rect.getPosition()).mag() < 3) {
 				if (s.world.getBlockValue(val.blockPosition.x, val.blockPosition.y, val.blockPosition.z) == 7) {
 					if (dir < 2) {
-						dir = 1 - dir;
+						dir = (dir + 2) % 4;
 					} else {
-						dir = 5 - dir;
+						dir = (dir + 2) % 4;
 					}
 				}
 			}
@@ -81,17 +85,24 @@ public class MoveEntity extends SimEntity {
 			if (s.world.getBlockValue(px, py, pz) == 12) {
 				s.world.setBlockValue(new Vector3i(px, py, pz), (short) 0);
 				IslandSim.grassEaten++;
-				s.add(new MoveEntity(curPos.clone()));
-				s.add(new MoveEntity(curPos.clone()));
+				s.add(new MoveEntity(curPos.clone(), ent));
+				s.add(new MoveEntity(curPos.clone(), ent));
 				s.setRemoveFlag(this.getID());
 				return;
 			}
 		}
 
-		//System.out.println(rect.getVelocity() + " " + rect.getPosition());
 	}
 	
-	public void render() {
-		
+	public void render(int pass) {
+		if (pass != 0)
+			return;
+		ent.setModelMatrix(
+				Matrix4f.translate(rect.getPosition()).multiply(
+						Matrix4f.scale(new Vector3f(.0625f, .0625f, .0625f)).multiply(
+								Matrix4f.rotateY(-90 * (dir - 1)).multiply(
+										Matrix4f.translate(new Vector3f(-4, -4, -4))
+										))));
+		ent.render();
 	}
 }
