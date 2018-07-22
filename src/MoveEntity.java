@@ -34,7 +34,7 @@ public class MoveEntity extends SimEntity {
 	public void update(Simulator s, float delta) {
 		life -= delta;
 		if (life < 0) {
-			s.setRemoveFlag(this.getID());
+			s.em.setRemoveFlag(this.getID());
 			return;
 		}
 		timer -= delta;
@@ -85,16 +85,16 @@ public class MoveEntity extends SimEntity {
 			if (s.world.getBlockValue(px, py, pz) == 12) {
 				s.world.setBlockValue(new Vector3i(px, py, pz), (short) 0);
 				IslandSim.grassEaten++;
-				s.add(new MoveEntity(curPos.clone(), ent));
-				s.add(new MoveEntity(curPos.clone(), ent));
-				s.setRemoveFlag(this.getID());
+				s.em.add(new MoveEntity(curPos.clone(), ent));
+				s.em.add(new MoveEntity(curPos.clone(), ent));
+				s.em.setRemoveFlag(this.getID());
 				return;
 			}
 		}
 
 	}
 	
-	public void render(int pass) {
+	public void render(Vector3f pos, Vector3f direction, int pass) {
 		if (pass != 0)
 			return;
 		ent.setModelMatrix(

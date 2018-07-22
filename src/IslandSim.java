@@ -29,6 +29,7 @@ import drawentity.ChunkEntity;
 import drawentity.FadeEntity;
 import engine.PlayerEntity;
 import engine.Simulator;
+import engine.StaticEntityManager;
 import physics.PhysSim;
 import physics.Rect;
 import voxels.VoxelData;
@@ -66,15 +67,15 @@ public class IslandSim {
 
 		World world = new World(new IslandBuilder(10, 80, 300, 0));
 		ChunkViewport cv = new ChunkViewport(new Vector3i(), new Vector3i(5, 3, 5), world, tx);		
-		Simulator sim = new Simulator(world, cv, new Vector3f(0, -.01f, 0), box);
+		Simulator sim = new Simulator(world, cv, new Vector3f(0, -.01f, 0), box, new StaticEntityManager());
 		
 		Raycast playerStart = world.raycast(new Vector3f(.5f, 30, .5f), new Vector3f(0, -1, 0), 30);
 		playerStart.position.y += .5;
 
 		PlayerEntity player = new PlayerEntity(box, playerStart.position, new Vector3f(.5f, 1.5f, .5f), c);
-		sim.add(player);
+		sim.em.add(player);
 		
-		sim.add(new GrassGrower());
+		sim.em.add(new GrassGrower());
 		
 		FadeEntity fade = new FadeEntity();
 		
@@ -109,7 +110,7 @@ public class IslandSim {
 			win.pollEvents();
 			
 			if (Input.isKeyHit(GLFW.GLFW_KEY_M)) {
-				sim.add(new MoveEntity(player.headPos.clone(), bunny));
+				sim.em.add(new MoveEntity(player.headPos.clone(), bunny));
 			}
 			
 			if (Input.isKeyHit(GLFW.GLFW_KEY_F))
